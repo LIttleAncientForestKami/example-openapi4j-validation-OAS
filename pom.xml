@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>lafk.edu.pl.api_validation</groupId>
+    <artifactId>oas-openapi4j-validation-probe</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>Simple test how to validate OAS with OpenAPI4j library</description>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <apiPkg>pl.edu.lafk.api_validation</apiPkg>
+
+        <!-- plugins -->
+        <vOpenApiGenMvnPlugin>6.6.0</vOpenApiGenMvnPlugin>
+        <vCompilerMvnPlugin>3.10.1</vCompilerMvnPlugin>
+        <!-- dependency versions -->
+        <vSBStarterWeb>3.1.0</vSBStarterWeb>
+        <vJacksonDatabind>2.15.2</vJacksonDatabind>
+        <vJacksonDatabindNullable>0.2.6</vJacksonDatabindNullable>
+        <vOpenApi4j>1.0.7</vOpenApi4j>
+        <vValApi>2.0.1.Final</vValApi>
+        <vTestNG>7.8.0</vTestNG>
+        <vRestAssured>5.3.0</vRestAssured>
+        <!-- vuln/transitives dependency versions - rolled back for now-->
+        <vTomcatEmbedCore>11.0.3</vTomcatEmbedCore>
+        <vLogback>1.5.10</vLogback>
+        <vSpringWeb>6.1.14</vSpringWeb>
+    </properties>
+
+    <dependencies>
+        <!-- careful! several high level vulns in transitives - neutralised below, in commented section - requires generation tweaking since if used so it breaks generation  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${vSBStarterWeb}</version>
+        </dependency>
+
+<!--breaks code gen-->
+<!--        -->
+<!--        &lt;!&ndash; vuln elimination for SB starter web - GHSA-5j33-cvvr-w245, Score: 9.8 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.tomcat.embed</groupId>-->
+<!--            <artifactId>tomcat-embed-core</artifactId>-->
+<!--            <version>${vTomcatEmbedCore}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; vuln elimination for SB starter web (Spring Web/MVC), Score: 8.1 and 7.5 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-web</artifactId>-->
+<!--            <version>${vSpringWeb}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; vuln elimination for SB starter web (Spring Web/MVC), Score: 8.1 and 7.5 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-webmvc</artifactId>-->
+<!--            <version>${vSpringWeb}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; vuln elimination for SB starter web - logback core and classic &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ch.qos.logback</groupId>-->
+<!--            <artifactId>logback-classic</artifactId>-->
+<!--            <version>${vLogback}</version>-->
+<!--        </dependency>-->
+        <!-- specified exactly eliminates transitive vuln in openapi4j-core -->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--            <version>${vJacksonDatabind}</version>-->
+<!--        </dependency>-->
+        <!-- transitive vuln in jackson, see jackson-databind above -->
+        <dependency>
+            <groupId>org.openapi4j</groupId>
+            <artifactId>openapi-core</artifactId>
+            <version>${vOpenApi4j}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.29</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.validation</groupId>-->
+<!--            <artifactId>validation-api</artifactId>-->
+<!--            <version>${vValApi}</version>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${vJacksonDatabindNullable}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapi4j</groupId>
+            <artifactId>openapi-schema-validator</artifactId>
+            <version>${vOpenApi4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapi4j</groupId>
+            <artifactId>openapi-parser</artifactId>
+            <version>${vOpenApi4j}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${vTestNG}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${vRestAssured}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${vOpenApiGenMvnPlugin}</version>
+                <executions>
+                    <execution>
+                        <id>generate-api-code</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api.yaml</inputSpec>
+                            <output>${project.basedir}/target/generated-sources/openapi</output>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>${apiPkg}</apiPackage>
+                            <modelPackage>${apiPkg}.model</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+<!-- if used, wants jakarta.validation package, but it's javax.validation actually... :O
+It's SB3 vs SB2
+https://stackoverflow.com/questions/75085412/spring-boot-3-0-package-javax-validation-does-not-exist
+-->
+                               <useJakartaEe>true</useJakartaEe>
+                                <useSpringBoot3>true</useSpringBoot3>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${vCompilerMvnPlugin}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
