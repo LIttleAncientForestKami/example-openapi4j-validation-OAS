@@ -1,0 +1,9 @@
+= About
+
+Simple check how to generate API first project and how to test the spec so it makes some sense.
+
+What's inside:
+
+1. simple petstore API as YAML, per OAS3.0
+2. tests with TestNG and OpenAPI4J library
+3. code gen via OpenAPI4j Spring generator
